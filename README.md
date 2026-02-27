@@ -476,7 +476,16 @@ data     → chegou com sucesso    (mostre o conteúdo)
 
 API sugerida (gratuita, sem autenticação):
 ```
-https://api.quotable.io/random
+[dummyjson](https://dummyjson.com)
+
+https://dummyjson.com/quotes/random
+https://dummyjson.com/quotes/random/1
+
+https://dummyjson.com/todos
+https://dummyjson.com/todos/1
+
+https://dummyjson.com/users
+https://dummyjson.com/users
 ```
 
 **Crie `useFetch<T>`:**
@@ -537,7 +546,7 @@ function TaskForm({ onAdd }: { onAdd: (title: string) => void }) {
 
   const handleSuggest = () => {
     // Força novo fetch mesmo que a url seja a mesma usando timestamp
-    setFetchUrl(`https://api.quotable.io/random?t=${Date.now()}`);
+    setFetchUrl(`dummyjson_api`);
   };
 
   return (
