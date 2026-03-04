@@ -3,9 +3,9 @@ import type { Task } from './types/tasks';
 
 
 function App(){
-  const[tasks,setTasks] = useState<Task[]>([]);
+  const[tasks,setTasks] = useState<Map<String, Task>>(new Map());
   const[newTask, setNewTask] = useState("");
-  const pendingCount = tasks.filter(t => !t.completed).length
+  const pendingCount = [...tasks.values()].filter(t=> !t.completed).length;
   
   function addTask(){
     const taskToAdd: Task = {
@@ -15,26 +15,32 @@ function App(){
       createdAt: Date.now(),
     };
 
-    setTasks([...tasks,taskToAdd]),
+    setTasks((prev) => {
+      const next = new Map(prev);
+      next.set(taskToAdd.id, taskToAdd);
+      return next;
+    });
     setNewTask("")
   }
 
   function toggled(id:string){
-      setTasks(
-        tasks.map(task =>
-          task.id === id
-          ?{...task,completed:!task.completed}
-          :task
-      )
-    )
+    setTasks((prev) => {
+      const next = new Map(prev);
+      const task = next.get(id);
+      if (!task) return prev;
+
+      next.set(id,{...task, completed: !task.completed});
+      return next;  
+  
+    });
   }
 
   function remove(id:string){
-    setTasks(
-      tasks.filter( task =>
-        task.id !== id
-      )
-    )
+    setTasks((prev) => {
+      const next = new Map(prev);
+      next.delete(id);
+      return next;
+    });
   }
 
   return(
@@ -51,7 +57,7 @@ function App(){
     
     <ul>
 
-      {tasks.map((task) =>(
+      {[...tasks.values()].map((task) =>(
         <li key={task.id} >
 
           <span onClick={() => toggled(task.id)}>{task.title}</span>
