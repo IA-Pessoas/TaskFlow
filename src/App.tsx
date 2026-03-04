@@ -3,11 +3,16 @@ import type { Task } from './types/tasks';
 
 
 function App(){
-  const[tasks,setTasks] = useState<Map<String, Task>>(new Map());
+  const[tasks,setTasks] = useState<Map<string, Task>>(new Map());
   const[newTask, setNewTask] = useState("");
-  const pendingCount = [...tasks.values()].filter(t=> !t.completed).length;
+  const[pendingCount, setpendingCount] = useState(0)
   
   function addTask(){
+    if(newTask === "") {
+      alert("title nao pode ser em branco.");
+      return;
+    }
+
     const taskToAdd: Task = {
       id: crypto.randomUUID(),
       title: newTask,
@@ -20,27 +25,37 @@ function App(){
       next.set(taskToAdd.id, taskToAdd);
       return next;
     });
+    
+    setpendingCount(p => p + 1) 
     setNewTask("")
   }
 
   function toggled(id:string){
+      const task = tasks.get(id)
+      if(!task) return;
+
     setTasks((prev) => {
       const next = new Map(prev);
-      const task = next.get(id);
-      if (!task) return prev;
+      const t = next.get(id);
+      if (!t) return prev;
 
-      next.set(id,{...task, completed: !task.completed});
+      next.set(id,{...t, completed: !t.completed});
       return next;  
   
     });
+    setpendingCount(p => p +(!task.completed? 1: -1))
   }
 
   function remove(id:string){
+      const task = tasks.get(id)
+      if(!task) return;
+
     setTasks((prev) => {
       const next = new Map(prev);
       next.delete(id);
       return next;
     });
+    if(!task.completed) setpendingCount( p => p - 1);
   }
 
   return(
