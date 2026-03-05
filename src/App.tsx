@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Task } from './types/tasks';
 
 
@@ -6,9 +6,18 @@ function App(){
   const[tasks,setTasks] = useState<Map<string, Task>>(new Map());
   const[newTask, setNewTask] = useState("");
   const[pendingCount, setpendingCount] = useState(0)
+
+  useEffect(()=> { 
+    const saved = localStorage.getItem("tasks");
+    if (saved) setTasks(new Map(JSON.parse(saved)));
+    }, []);
   
-  function addTask(){
-    if(newTask === "") {
+    //O bug acontece devido a como tasks está sempre chamando o setTasks o effect é ativado o tempo todo, causando o ciclo infinito.
+    // Como o estado sempre está sendo modificado, o ciclo continua a ser re-renderizado
+    // Para corrigir é preciso tirar o valor de dentro [], que é a condição. Sendo vazio renderiza apenas uma vez.
+  
+    function addTask(){
+    if(newTask.trim() === "") {
       alert("title nao pode ser em branco.");
       return;
     }
@@ -43,7 +52,7 @@ function App(){
       return next;  
   
     });
-    setpendingCount(p => p +(!task.completed? 1: -1))
+    setpendingCount(p => p +(task.completed? 1: -1))
   }
 
   function remove(id:string){
