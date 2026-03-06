@@ -7,15 +7,33 @@ function App(){
   const[newTask, setNewTask] = useState("");
   const[pendingCount, setpendingCount] = useState(0)
 
-  useEffect(()=> { 
-    const saved = localStorage.getItem("tasks");
-    if (saved) setTasks(new Map(JSON.parse(saved)));
-    }, []);
-  
+    useEffect(() => {
+    const saved = localStorage.getItem('tasks');
+    if (saved) {
+      const data = JSON.parse(saved);
+      const map = new Map<string,Task>(data);
+      setTasks(map);
+
+      const inicial = [...map.values()].filter(t => !t.completed).length;
+      setpendingCount(inicial);
+    };
+  }, []);
+    
     //O bug acontece devido a como tasks está sempre chamando o setTasks o effect é ativado o tempo todo, causando o ciclo infinito.
     // Como o estado sempre está sendo modificado, o ciclo continua a ser re-renderizado
     // Para corrigir é preciso tirar o valor de dentro [], que é a condição. Sendo vazio renderiza apenas uma vez.
-  
+    
+    useEffect(() => {
+      if (tasks.size > 0) {
+    localStorage.setItem('tasks', JSON.stringify([...tasks]));
+  }
+    },[tasks])
+
+    useEffect(()=>{
+      const pending = [...tasks.values()].filter(t => !t.completed).length;
+      document.title = pending > 0 ? `(${pending}) TaskFlow` : 'TaskFlow';
+    },[tasks]);
+    
     function addTask(){
     if(newTask.trim() === "") {
       alert("title nao pode ser em branco.");
