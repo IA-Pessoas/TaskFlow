@@ -19,7 +19,7 @@ function App(){
     };
   }, []);
     
-    //O bug acontece devido a como tasks está sempre chamando o setTasks o effect é ativado o tempo todo, causando o ciclo infinito.
+    //O bug acontecia devido a como tasks está sempre chamando o setTasks o effect é ativado o tempo todo, causando o ciclo infinito.
     // Como o estado sempre está sendo modificado, o ciclo continua a ser re-renderizado
     // Para corrigir é preciso tirar o valor de dentro [], que é a condição. Sendo vazio renderiza apenas uma vez.
     
