@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Task } from './types/tasks';
 
 
@@ -6,9 +6,36 @@ function App(){
   const[tasks,setTasks] = useState<Map<string, Task>>(new Map());
   const[newTask, setNewTask] = useState("");
   const[pendingCount, setpendingCount] = useState(0)
-  
-  function addTask(){
-    if(newTask === "") {
+
+    useEffect(() => {
+    const saved = localStorage.getItem('tasks');
+    if (saved) {
+      const data = JSON.parse(saved);
+      const map = new Map<string,Task>(data);
+      setTasks(map);
+
+      const inicial = [...map.values()].filter(t => !t.completed).length;
+      setpendingCount(inicial);
+    };
+  }, []); // se não tiver array, ela vai ser chamada sempre que a página for renderizada
+    
+    // O bug acontecia devido a como tasks está sempre chamando o setTasks o effect é ativado o tempo todo, causando o ciclo infinito.
+    // Como o estado sempre está sendo modificado, o ciclo continua a ser re-renderizado
+    // Para corrigir é preciso tirar o valor de dentro [], que é a condição. Sendo vazio renderiza apenas uma vez.
+    
+    useEffect(() => {
+      if (tasks.size >= 0) {
+    localStorage.setItem('tasks', JSON.stringify([...tasks]));
+  }
+    },[tasks])
+
+    useEffect(()=>{
+      const pending = [...tasks.values()].filter(t => !t.completed).length;
+      document.title = pending > 0 ? `(${pending}) TaskFlow` : 'TaskFlow';
+    },[tasks]);
+    
+    function addTask(){
+    if(newTask.trim() === "") {
       alert("title nao pode ser em branco.");
       return;
     }
@@ -43,7 +70,7 @@ function App(){
       return next;  
   
     });
-    setpendingCount(p => p +(!task.completed? 1: -1))
+    setpendingCount(p => p +(task.completed? 1: -1))
   }
 
   function remove(id:string){
