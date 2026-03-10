@@ -26,7 +26,7 @@ function useTasks(){
 
     const pendingCount = tasks.filter(t => !t.completed).length;
 
-    return {tasks,addTask, deleteTask, toggleTask,pendingCount};
+    return {tasks, addTask, deleteTask, toggleTask, pendingCount};
 }
 
 export{useTasks}
