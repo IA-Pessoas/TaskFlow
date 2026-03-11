@@ -21,4 +21,4 @@ function useLocalStorage<T>(
     return [storedValue, setValue];
 }
 
-export{useLocalStorage}
+export {useLocalStorage}

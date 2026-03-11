@@ -6,12 +6,18 @@ function useTasks(){
     const[tasks,setTasks] = useLocalStorage<Task[]>('tasks',[]);
     
     const addTask = (title : string) =>{
-        setTasks(prev =>[...prev, {
-            id : crypto.randomUUID(),
-            title,
-            completed : false,
-            createdAt : Date.now(),
-        }]);
+        const trimmedTitle = title.trim();
+
+            if(trimmedTitle === ""){
+                return;
+            }
+
+            setTasks(prev =>[...prev, {
+                id : crypto.randomUUID(),
+                title : trimmedTitle,
+                completed : false,
+                createdAt : Date.now(),
+            }]);
     };
 
     const deleteTask = (id : string) =>{
