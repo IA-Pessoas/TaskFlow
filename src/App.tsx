@@ -1,53 +1,32 @@
-import { useTasks } from './hooks/useTasks';
-import { useTaskTitle } from './hooks/useTaskTitle';
+import TaskForm from "./components/taskForm";
+import { useTasks } from "./hooks/useTasks";
+import { useTaskTitle } from "./hooks/useTaskTitle";
 
-function App(){
+function App() {
+  const { tasks, addTask, deleteTask, toggleTask, pendingCount } = useTasks();
 
-const { tasks, addTask, deleteTask, toggleTask, pendingCount } = useTasks();
-useTaskTitle(pendingCount);
+  useTaskTitle(pendingCount);
 
-function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-
-  const formData = new FormData(e.currentTarget);
-  const title = String(formData.get("task") || "");
-
-  addTask(title);
-
-  e.currentTarget.reset();
-}
-  return(
+  return (
     <div>
       <header>
         <h1>Lista de Tarefas</h1>
-        <br/>
-        <p>Pendentes : {pendingCount} </p>
+        <p>Pendentes: {pendingCount}</p>
       </header>
 
-      <form onSubmit={handleSubmit}>
-        <input name="task" />
-        <button type="submit">Adicionar</button>
-      </form>
-    
-    <ul>
+      <TaskForm onAdd={addTask} />
 
-      {tasks.map((task) =>(
-        <li key={task.id} >
-
-          <span onClick={() => toggleTask(task.id)}>{task.title}</span>
-          
-          <span>{task.completed ? "✓ " : ""}</span>
-
-          <button onClick={()=> deleteTask(task.id)}>
-            🗑     
-          </button>
-      
-        </li>
-       ))}
-
-   </ul>
-
-  </div>
-  )
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <span onClick={() => toggleTask(task.id)}>{task.title}</span>
+            <span>{task.completed ? "✓ " : ""}</span>
+            <button onClick={() => deleteTask(task.id)}>🗑</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-export default App
+
+export default App;
