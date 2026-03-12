@@ -9,6 +9,7 @@ function useTasks(){
         const trimmedTitle = title.trim();
 
             if(trimmedTitle === ""){
+             alert("Texto inválido")
                 return;
             }
 
@@ -35,4 +36,4 @@ function useTasks(){
     return {tasks, addTask, deleteTask, toggleTask, pendingCount};
 }
 
-export{useTasks}
+export { useTasks }

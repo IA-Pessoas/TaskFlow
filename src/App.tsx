@@ -1,4 +1,5 @@
 import TaskForm from "./components/taskForm";
+import { TaskItem } from "./components/taskItem";
 import { useTasks } from "./hooks/useTasks";
 import { useTaskTitle } from "./hooks/useTaskTitle";
 
@@ -18,11 +19,12 @@ function App() {
 
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>
-            <span onClick={() => toggleTask(task.id)}>{task.title}</span>
-            <span>{task.completed ? "✓ " : ""}</span>
-            <button onClick={() => deleteTask(task.id)}>🗑</button>
-          </li>
+          <TaskItem
+            key={task.id}
+            task ={task}
+            onToggle={toggleTask}
+            onDelete={deleteTask}
+          />
         ))}
       </ul>
     </div>

@@ -6,4 +6,4 @@ function useTaskTitle(pendingCount : number) {
     },[pendingCount]);
 }
 
-export {useTaskTitle };
+export { useTaskTitle };
