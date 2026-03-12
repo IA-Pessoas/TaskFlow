@@ -1,5 +1,5 @@
 import TaskForm from "./components/taskForm";
-import { TaskItem } from "./components/taskItem";
+import { TaskList } from "./components/taskList";
 import { useTasks } from "./hooks/useTasks";
 import { useTaskTitle } from "./hooks/useTaskTitle";
 
@@ -17,16 +17,11 @@ function App() {
 
       <TaskForm onAdd={addTask} />
 
-      <ul>
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task ={task}
-            onToggle={toggleTask}
-            onDelete={deleteTask}
-          />
-        ))}
-      </ul>
+      <TaskList
+        tasks={tasks}
+        onToggle={toggleTask}
+        onDelete={deleteTask}
+      />
     </div>
   );
 }
