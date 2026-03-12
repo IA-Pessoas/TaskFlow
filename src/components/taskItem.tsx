@@ -1,8 +1,4 @@
-type Task = {
-    id: string;
-    title : string;
-    completed : boolean;
-};
+import type { Task } from "../types/tasks";
 
 type TaskItemProps = {
     task: Task;
