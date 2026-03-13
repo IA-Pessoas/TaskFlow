@@ -18,6 +18,13 @@ function TaskForm({ onAdd }: TaskFormProps) {
     inputRef.current?.focus();
   }, []);
 
+  const commitCount = useRef(0);
+
+  useEffect(() => {
+    commitCount.current +=1
+    console.log("Commits:", commitCount.current);
+  })
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
