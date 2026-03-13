@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 
 type TaskFormProps = {
@@ -12,23 +12,32 @@ function TaskForm({ onAdd }: TaskFormProps) {
 
   const { data, loading, error } = useFetch<{ todo: string }>(fetchUrl);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  },[]);
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
 
     const trimmedTitle = title.trim();
     if (!trimmedTitle) return;
 
     onAdd(trimmedTitle);
     setTitle("");
+    inputRef.current?.focus()
   }
 
   function handleSuggest() {
-    setFetchUrl(`https://dummyjson.com/todos/random?ts=ts=${Date.now()}`);
+    setFetchUrl(`https://dummyjson.com/todos/random?ts=${Date.now()}`);
   }
 
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
       <input
+        ref={inputRef}
         name="task"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
