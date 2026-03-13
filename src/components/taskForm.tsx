@@ -16,18 +16,17 @@ function TaskForm({ onAdd }: TaskFormProps) {
 
   useEffect(() => {
     inputRef.current?.focus();
-  },[]);
+  }, []);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
 
     const trimmedTitle = title.trim();
     if (!trimmedTitle) return;
 
     onAdd(trimmedTitle);
     setTitle("");
-    inputRef.current?.focus()
+    inputRef.current?.focus();
   }
 
   function handleSuggest() {
