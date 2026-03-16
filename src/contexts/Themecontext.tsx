@@ -2,12 +2,12 @@ import { createContext, useContext } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 type Theme = 'light' | 'dark';
 
-interface ThemeContextType{
+interface ThemeontextType{
     theme: Theme;
     toggleTheme: () => void;
 }
 
-export const ThemeContext = createContext<ThemeContextType | null>(null);
+export const ThemeContext = createContext<ThemeontextType | null>(null);
 
 export function ThemeProvider({ children } : { children: React.ReactNode }){
     const [theme, setTheme] = useLocalStorage<Theme>('theme', 'light');

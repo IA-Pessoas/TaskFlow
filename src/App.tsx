@@ -1,4 +1,5 @@
 import TaskForm from "./components/taskForm";
+import ThemeToggle  from "./components/themeToggle";
 import { TaskList } from "./components/taskList";
 import { useTasks } from "./hooks/useTasks";
 import { useTaskTitle } from "./hooks/useTaskTitle";
@@ -22,6 +23,8 @@ function App() {
         onToggle={toggleTask}
         onDelete={deleteTask}
       />
+
+      <ThemeToggle/>
     </div>
   );
 }
