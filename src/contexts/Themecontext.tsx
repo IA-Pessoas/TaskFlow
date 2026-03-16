@@ -1,30 +1,38 @@
-import { createContext, useContext } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-type Theme = 'light' | 'dark';
+import { createContext, useContext, useEffect } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
-interface ThemeontextType{
-    theme: Theme;
-    toggleTheme: () => void;
+type Theme = "light" | "dark";
+
+interface ThemeContextType {
+  theme: Theme;
+  toggleTheme: () => void;
 }
 
-export const ThemeContext = createContext<ThemeontextType | null>(null);
+export const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function ThemeProvider({ children } : { children: React.ReactNode }){
-    const [theme, setTheme] = useLocalStorage<Theme>('theme', 'light');
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useLocalStorage<Theme>("theme", "light");
 
-    const toggleTheme = () => 
-        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-    return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        {children}
-        </ThemeContext.Provider>
-    );
+  useEffect(() => {
+    document.body.style.backgroundColor =
+      theme === "dark" ? "#1e1e1e" : "#ffffff";
+
+    document.body.style.color =
+      theme === "dark" ? "#ffffff" : "#000000";
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
-// Hook helper — centraliza o erro e evita checar null em todo lugar
 export function useTheme() {
   const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error('useTheme deve ser usado dentro de ThemeProvider');
+  if (!ctx) throw new Error("useTheme deve ser usado dentro de ThemeProvider");
   return ctx;
 }
