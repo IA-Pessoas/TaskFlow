@@ -1,15 +1,13 @@
 import type { FormEvent } from "react";
 import { useState, useRef, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
+import { useTasksContext } from "../contexts/TasksContext";
 
-type TaskFormProps = {
-  onAdd: (title: string) => void;
-};
-
-function TaskForm({ onAdd }: TaskFormProps) {
+function TaskForm() {
   const [title, setTitle] = useState("");
   const [fetchUrl, setFetchUrl] = useState<string | null>(null);
 
+  const { addTask } = useTasksContext();
   const { data, loading, error } = useFetch<{ todo: string }>(fetchUrl);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,7 +29,7 @@ function TaskForm({ onAdd }: TaskFormProps) {
     const trimmedTitle = title.trim();
     if (!trimmedTitle) return;
 
-    onAdd(trimmedTitle);
+    addTask(trimmedTitle);
     setTitle("");
     inputRef.current?.focus();
   }

@@ -1,14 +1,14 @@
 import TaskForm from "./components/taskForm";
 import ThemeToggle  from "./components/themeToggle";
 import { TaskList } from "./components/taskList";
-import { useTasks } from "./hooks/useTasks";
+import { useTasksContext } from "./contexts/TasksContext";
 import { useTaskTitle } from "./hooks/useTaskTitle";
 
 function App() {
-  const { tasks, addTask, deleteTask, toggleTask, pendingCount } = useTasks();
+  const {pendingCount} = useTasksContext();
 
   useTaskTitle(pendingCount);
-
+  
   return (
     <div>
       <header>
@@ -16,14 +16,8 @@ function App() {
         <p>Pendentes: {pendingCount}</p>
       </header>
 
-      <TaskForm onAdd={addTask} />
-
-      <TaskList
-        tasks={tasks}
-        onToggle={toggleTask}
-        onDelete={deleteTask}
-      />
-
+      <TaskForm />
+      <TaskList />
       <ThemeToggle/>
     </div>
   );
