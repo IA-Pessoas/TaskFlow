@@ -13,8 +13,10 @@ export function TaskList(){
 
   const filteredTasks = useMemo(()=> {
     return tasks
-    .filter(
-      (t) => filter === 'all' || t.completed === (filter === 'completed'))
+    .filter((t) => {
+      if (filter === "all") return true;
+      return filter === "completed" ? t.completed : !t.completed;
+    })
     .filter(
       (t) => t.title.toLowerCase().includes(debouncedSearch.toLowerCase()));
   },[tasks, filter, debouncedSearch]);
