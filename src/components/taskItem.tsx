@@ -1,3 +1,4 @@
+import React from "react";
 import type { Task } from "../types/tasks";
 
 type TaskItemProps = {
@@ -6,7 +7,13 @@ type TaskItemProps = {
     onDelete: (id: string) => void;
 };
 
-export function TaskItem ({ task, onToggle, onDelete}: TaskItemProps) {
+const TaskItem = React.memo(function TaskItem({
+task,
+    onDelete,
+    onToggle,
+    }: TaskItemProps){
+      console.log("🔄 TaskItem render", task.title);
+    
     return(
         <li>
         <input
@@ -19,6 +26,7 @@ export function TaskItem ({ task, onToggle, onDelete}: TaskItemProps) {
 
         <button onClick={() => onDelete(task.id)}>🗑</button>
         </li>
-    )
-}
+    );
+});
 
+export {TaskItem}
